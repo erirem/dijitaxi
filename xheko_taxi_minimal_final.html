@@ -14,6 +14,22 @@
   @media (min-width:840px){ .device{ margin:24px auto; border:1px solid #1b1b1f; border-radius:28px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.45) } }
 
   header { padding:24px 16px 12px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px }
+  
+  .tab-nav { display:flex; background:#1A1B1E; border-radius:12px; margin:16px; padding:4px; gap:4px }
+  .tab-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; padding:12px 8px; border:none; background:transparent; color:#8B8B8B; border-radius:8px; cursor:pointer; transition:all 0.2s }
+  .tab-btn.active { background:#2A2B2E; color:#F0ECE3 }
+  .tab-btn:hover { background:#2A2B2E; color:#F0ECE3 }
+  .tab-icon { font-size:16px }
+  .tab-text { font-size:11px; font-weight:500; text-align:center; line-height:1.2 }
+  
+  .tab-content { position:relative }
+  .tab-panel { display:none }
+  .tab-panel.active { display:block }
+  
+  .empty-state { text-align:center; padding:40px 20px }
+  .empty-icon { font-size:48px; color:#8B8B8B; margin-bottom:16px }
+  .empty-state p { color:#8B8B8B; margin-bottom:24px; font-size:14px }
+  .cta-secondary { background:var(--gold); color:#141414; border:none; padding:12px 24px; border-radius:8px; font-weight:600; cursor:pointer }
   .logo svg { height:44px; width:auto; display:block; filter:drop-shadow(0 2px 8px rgba(0,0,0,.35)) }
   .brand h1 { margin:0; font:600 22px 'Playfair Display',serif; letter-spacing:.3px }
   .brand p { margin:0; color:#d6d0c3; font-size:12px }
@@ -48,12 +64,26 @@
 </div>
       <div class="brand">
         <h1>Xheko Imperial</h1>
-        <p>Taxi Request</p>
+        <p>Taxi Service</p>
       </div>
     </header>
 
-    <section class="card">
-      <div class="pill">Create a Taxi Request</div>
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="call-taxi">
+        <span class="tab-text">Call a Taxi</span>
+      </button>
+      <button class="tab-btn" data-tab="my-requests">
+        <span class="tab-text">My Requests</span>
+      </button>
+      <button class="tab-btn" data-tab="active-expedition">
+        <span class="tab-text">Active Expedition</span>
+      </button>
+    </nav>
+
+    <div class="tab-content">
+      <div class="tab-panel active" id="call-taxi">
+        <section class="card">
+          <div class="pill">Create a Taxi Request</div>
 
       <div class="group">
         <div class="label">Name Surname *</div>
@@ -95,7 +125,31 @@
         <div class="label">Additional Notes</div>
         <div class="textarea">Any additional info…</div>
       </div>
-    </section>
+        </section>
+      </div>
+
+      <div class="tab-panel" id="my-requests">
+        <section class="card">
+          <div class="pill">My Requests</div>
+          <div class="empty-state">
+            <div class="empty-icon">→</div>
+            <p>To see your requests, first create a taxi request</p>
+            <button class="cta-secondary">Call a Taxi</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="tab-panel" id="active-expedition">
+        <section class="card">
+          <div class="pill">Active Expedition</div>
+          <div class="empty-state">
+            <div class="empty-icon">→</div>
+            <p>To view active expeditions, first create a taxi request</p>
+            <button class="cta-secondary">Call a Taxi</button>
+          </div>
+        </section>
+      </div>
+    </div>
 
     <footer>© 2025 Xheko Imperial Luxury Hotel &amp; Spa</footer>
   </div>
@@ -103,5 +157,26 @@
   <div class="cta-bar">
     <button class="cta">Call a Taxi Now</button>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+      
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const targetTab = this.getAttribute('data-tab');
+          
+          // Remove active class from all buttons and panels
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          tabPanels.forEach(panel => panel.classList.remove('active'));
+          
+          // Add active class to clicked button and corresponding panel
+          this.classList.add('active');
+          document.getElementById(targetTab).classList.add('active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>
