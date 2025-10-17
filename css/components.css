@@ -1,0 +1,205 @@
+/* ========================================
+   COMPONENTS - Buttons, Cards, Forms
+   ======================================== */
+
+/* Tab Navigation */
+.tab-nav {
+  display: flex;
+  background: #1A1B1E;
+  border-radius: 12px;
+  margin: 16px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  border: none;
+  background: transparent;
+  color: #8B8B8B;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: #2A2B2E;
+  color: #F0ECE3;
+}
+
+.tab-btn:hover {
+  background: #2A2B2E;
+  color: #F0ECE3;
+}
+
+.tab-icon {
+  font-size: 16px;
+}
+
+.tab-text {
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Tab Content */
+.tab-content {
+  position: relative;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* Card Component */
+.card {
+  width: min(92%, 620px);
+  margin: 18px auto 0;
+  border: 1px solid var(--stroke);
+  background: rgba(255,255,255,.05);
+  border-radius: 18px;
+  padding: 18px;
+  backdrop-filter: blur(6px);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--stroke);
+  border-radius: 999px;
+  font-size: 12px;
+  color: #E8DFC9;
+}
+
+/* Form Components */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.group-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.label {
+  color: #D9D2C4;
+  font-size: 12px;
+}
+
+.control, .textarea {
+  border: 1px solid var(--stroke);
+  background: #18181B;
+  color: #F0ECE3;
+  border-radius: 12px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  font-size: 15px;
+}
+
+.textarea {
+  min-height: 110px;
+  padding: 12px 14px;
+  height: auto;
+}
+
+/* Checkboxes */
+.checks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #E8E2D6;
+}
+
+.check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--gold);
+}
+
+/* Buttons */
+.cta-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, #1A1B1E, #121316);
+  border-top: 1px solid #222229;
+  padding: 12px 14px;
+  z-index: 1000;
+}
+
+@supports(padding: max(0px)) {
+  .cta-bar {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+.cta {
+  width: min(720px, 96vw);
+  height: 68px;
+  margin: 0 auto;
+  display: block;
+  border-radius: 16px;
+  background: var(--gold);
+  border: 1px solid #8f7f54;
+  color: #141414;
+  font-weight: 700;
+  letter-spacing: .2px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.cta-secondary {
+  background: var(--gold);
+  color: #141414;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: #8B8B8B;
+  margin-bottom: 16px;
+}
+
+.empty-state p {
+  color: #8B8B8B;
+  margin-bottom: 24px;
+  font-size: 14px;
+}

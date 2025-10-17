@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Xheko Imperial – Taxi Service</title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="device">
+    <!-- Header -->
+    <header>
+      <div class="logo">
+        <img src="assets/xheko_imperial.png" alt="Xheko Imperial Logo" />
+      </div>
+      <div class="brand">
+        <h1>Xheko Imperial</h1>
+        <p>Taxi Service</p>
+      </div>
+    </header>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="call-taxi">
+        <span class="tab-text">Call a Taxi</span>
+      </button>
+      <button class="tab-btn" data-tab="my-requests">
+        <span class="tab-text">My Requests</span>
+      </button>
+      <button class="tab-btn" data-tab="active-expedition">
+        <span class="tab-text">Active Expedition</span>
+      </button>
+    </nav>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- Call a Taxi Tab -->
+      <div class="tab-panel active" id="call-taxi">
+        <section class="card">
+          <div class="pill">Create a Taxi Request</div>
+
+          <div class="group">
+            <div class="label">Name Surname *</div>
+            <div class="control">Enter your name</div>
+          </div>
+
+          <div class="group">
+            <div class="label">Phone Number *</div>
+            <div class="control">🇦🇱 +355 ••• ••• •••</div>
+          </div>
+
+          <div class="group-row">
+            <div class="group">
+              <div class="label">Room</div>
+              <div class="control">🔔 101</div>
+            </div>
+            <div class="group">
+              <div class="label">Passengers *</div>
+              <div class="control">1 Person</div>
+            </div>
+          </div>
+
+          <div class="group">
+            <div class="label">Destination *</div>
+            <div class="control">Airport / City</div>
+          </div>
+
+          <div class="group">
+            <div class="label">Special Requests</div>
+            <div class="checks">
+              <label class="check"><input type="checkbox" checked /> Luggage</label>
+              <label class="check"><input type="checkbox" /> Wheelchair</label>
+              <label class="check"><input type="checkbox" /> Child seat</label>
+              <label class="check"><input type="checkbox" /> Pet</label>
+            </div>
+          </div>
+
+          <div class="group">
+            <div class="label">Additional Notes</div>
+            <div class="textarea">Any additional info…</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- My Requests Tab -->
+      <div class="tab-panel" id="my-requests">
+        <section class="card">
+          <div class="pill">My Requests</div>
+          <div class="empty-state">
+            <div class="empty-icon">→</div>
+            <p>To see your requests, first create a taxi request</p>
+            <button class="cta-secondary">Call a Taxi</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Active Expedition Tab -->
+      <div class="tab-panel" id="active-expedition">
+        <section class="card">
+          <div class="pill">Active Expedition</div>
+          <div class="empty-state">
+            <div class="empty-icon">→</div>
+            <p>To view active expeditions, first create a taxi request</p>
+            <button class="cta-secondary">Call a Taxi</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>© 2025 Xheko Imperial Luxury Hotel & Spa</footer>
+  </div>
+
+  <!-- Fixed CTA Button -->
+  <div class="cta-bar">
+    <button class="cta">Call a Taxi Now</button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/tabs.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

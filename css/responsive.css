@@ -1,0 +1,67 @@
+/* ========================================
+   RESPONSIVE STYLES - Media Queries
+   ======================================== */
+
+/* Mobile Safari Fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .cta-bar {
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .cta-bar {
+    position: fixed !important;
+    bottom: 0 !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .cta-bar {
+    position: sticky !important;
+    bottom: 0 !important;
+    transform: translateZ(0);
+  }
+}
+
+/* Mobile Grid Adjustments */
+@media (max-width: 360px) {
+  .group-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 600px) and (min-width: 361px) {
+  .group-row {
+    gap: 12px;
+  }
+}
+
+/* Tablet and Desktop */
+@media (min-width: 768px) {
+  .tab-nav {
+    margin: 20px;
+  }
+  
+  .tab-btn {
+    padding: 16px 12px;
+  }
+  
+  .tab-text {
+    font-size: 12px;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1024px) {
+  .device {
+    max-width: 800px;
+  }
+  
+  .card {
+    max-width: 700px;
+  }
+}
