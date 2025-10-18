@@ -53,7 +53,48 @@
 
           <div class="group">
             <div class="label">Phone Number *</div>
-            <input type="tel" class="control" placeholder="🇦🇱 +355 ••• ••• •••" required>
+            <div class="phone-input-container">
+              <div class="country-selector">
+                <button type="button" class="country-btn" id="country-btn">
+                  <span class="country-flag">🇦🇱</span>
+                  <span class="country-code">+355</span>
+                  <span class="dropdown-arrow">▼</span>
+                </button>
+                <div class="country-dropdown" id="country-dropdown">
+                  <div class="country-option" data-code="+355" data-flag="🇦🇱">
+                    <span class="country-flag">🇦🇱</span>
+                    <span class="country-name">Albania (Shqipëri)</span>
+                    <span class="country-code">+355</span>
+                  </div>
+                  <div class="country-option" data-code="+90" data-flag="🇹🇷">
+                    <span class="country-flag">🇹🇷</span>
+                    <span class="country-name">Turkey (Türkiye)</span>
+                    <span class="country-code">+90</span>
+                  </div>
+                  <div class="country-option" data-code="+1" data-flag="🇺🇸">
+                    <span class="country-flag">🇺🇸</span>
+                    <span class="country-name">United States</span>
+                    <span class="country-code">+1</span>
+                  </div>
+                  <div class="country-option" data-code="+44" data-flag="🇬🇧">
+                    <span class="country-flag">🇬🇧</span>
+                    <span class="country-name">United Kingdom</span>
+                    <span class="country-code">+44</span>
+                  </div>
+                  <div class="country-option" data-code="+49" data-flag="🇩🇪">
+                    <span class="country-flag">🇩🇪</span>
+                    <span class="country-name">Germany (Deutschland)</span>
+                    <span class="country-code">+49</span>
+                  </div>
+                  <div class="country-option" data-code="+33" data-flag="🇫🇷">
+                    <span class="country-flag">🇫🇷</span>
+                    <span class="country-name">France</span>
+                    <span class="country-code">+33</span>
+                  </div>
+                </div>
+              </div>
+              <input type="tel" class="phone-number-input" placeholder="Enter your phone number" required>
+            </div>
           </div>
 
           <div class="group-row">

@@ -10,6 +10,7 @@ class TaxiApp {
   init() {
     this.bindEvents();
     this.setupFormValidation();
+    this.setupPhoneInput();
   }
 
   bindEvents() {
@@ -39,6 +40,40 @@ class TaxiApp {
     }
   }
 
+  setupPhoneInput() {
+    const countryBtn = document.getElementById('country-btn');
+    const countryDropdown = document.getElementById('country-dropdown');
+    const countryOptions = document.querySelectorAll('.country-option');
+
+    if (!countryBtn || !countryDropdown) return;
+
+    // Toggle dropdown
+    countryBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      countryDropdown.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+      countryDropdown.classList.remove('show');
+    });
+
+    // Handle country selection
+    countryOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        const flag = option.dataset.flag;
+        const code = option.dataset.code;
+        
+        // Update button
+        countryBtn.querySelector('.country-flag').textContent = flag;
+        countryBtn.querySelector('.country-code').textContent = code;
+        
+        // Close dropdown
+        countryDropdown.classList.remove('show');
+      });
+    });
+  }
+
   handleTaxiRequest(e) {
     e.preventDefault();
     
@@ -56,9 +91,14 @@ class TaxiApp {
   getFormData() {
     // Extract form data from actual inputs
     const form = document.querySelector('#call-taxi .card');
+    const countryCode = document.querySelector('.country-code').textContent;
+    const phoneNumber = document.querySelector('.phone-number-input').value;
+    
     return {
       name: form.querySelector('input[type="text"]')?.value || '',
-      phone: form.querySelector('input[type="tel"]')?.value || '',
+      phone: `${countryCode}${phoneNumber}`,
+      countryCode: countryCode,
+      phoneNumber: phoneNumber,
       room: form.querySelector('input[value="101"]')?.value || '',
       passengers: form.querySelector('select')?.value || '',
       destination: form.querySelector('input[placeholder*="Airport"]')?.value || '',
