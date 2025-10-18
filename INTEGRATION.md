@@ -1,6 +1,6 @@
 # Integration Guide
 
-## 🚀 How to Integrate into Existing Website
+##  How to Integrate into Existing Website
 
 ### **Method 1: Iframe Integration (Easiest)**
 ```html
@@ -63,14 +63,14 @@ fetch('/api/taxi-request', {
 });
 ```
 
-## 🎯 Integration Benefits
+##  Integration Benefits
 
-- ✅ **Standalone** - Works independently
-- ✅ **Responsive** - Mobile-friendly
-- ✅ **Modular** - Easy to customize
-- ✅ **Professional** - Production-ready
+-  **Standalone** - Works independently
+-  **Responsive** - Mobile-friendly
+-  **Modular** - Easy to customize
+-  **Professional** - Production-ready
 
-## 📱 Mobile Integration
+##  Mobile Integration
 
 ```html
 <!-- Mobile-optimized iframe -->
@@ -83,7 +83,7 @@ fetch('/api/taxi-request', {
 </iframe>
 ```
 
-## 🔧 Customization
+##  Customization
 
 ### **Styling:**
 Edit CSS variables in `css/main.css`:
