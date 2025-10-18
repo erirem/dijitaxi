@@ -166,8 +166,8 @@ class TaxiApp {
     
     if (!data.phoneNumber || data.phoneNumber.trim() === '') {
       errors.push('Phone number is required');
-    } else if (!/^[\+]?[0-9\s\-\(\)]{8,}$/.test(data.phoneNumber)) {
-      errors.push('Please enter a valid phone number');
+    } else if (!/^[0-9\s\-\(\)]{7,15}$/.test(data.phoneNumber)) {
+      errors.push('Please enter a valid phone number (7-15 digits)');
     }
     
     if (!data.destination || data.destination.trim() === '') {
@@ -322,6 +322,81 @@ class TaxiApp {
       }
     });
     document.dispatchEvent(event);
+    
+    // Add request to local list (for demo purposes)
+    this.addRequestToList(result);
+  }
+
+  addRequestToList(requestData) {
+    const requestList = document.getElementById('request-list');
+    const emptyState = document.getElementById('empty-requests');
+    
+    // Hide empty state, show request list
+    emptyState.style.display = 'none';
+    requestList.style.display = 'block';
+    
+    // Create request item
+    const requestItem = document.createElement('div');
+    requestItem.className = 'request-item';
+    requestItem.innerHTML = `
+      <div class="request-header">
+        <div class="request-id">REQ-${Date.now().toString().slice(-6)}</div>
+        <div class="request-status status-pending">Pending</div>
+      </div>
+      <div class="request-details">
+        <div class="request-detail">
+          <div class="request-detail-label">Name</div>
+          <div class="request-detail-value">${requestData.name}</div>
+        </div>
+        <div class="request-detail">
+          <div class="request-detail-label">Phone</div>
+          <div class="request-detail-value">${requestData.phone}</div>
+        </div>
+        <div class="request-detail">
+          <div class="request-detail-label">Room</div>
+          <div class="request-detail-value">${requestData.room}</div>
+        </div>
+        <div class="request-detail">
+          <div class="request-detail-label">Passengers</div>
+          <div class="request-detail-value">${requestData.passengers} People</div>
+        </div>
+        <div class="request-detail">
+          <div class="request-detail-label">Destination</div>
+          <div class="request-detail-value">${requestData.destination}</div>
+        </div>
+        <div class="request-detail">
+          <div class="request-detail-label">Special Requests</div>
+          <div class="request-detail-value">${requestData.specialRequests.join(', ') || 'None'}</div>
+        </div>
+      </div>
+      <div class="request-actions">
+        <button class="request-btn" onclick="this.cancelRequest(this)">Cancel</button>
+        <button class="request-btn" onclick="this.trackRequest(this)">Track</button>
+      </div>
+    `;
+    
+    // Add to top of list
+    requestList.insertBefore(requestItem, requestList.firstChild);
+  }
+
+  cancelRequest(button) {
+    const requestItem = button.closest('.request-item');
+    const statusElement = requestItem.querySelector('.request-status');
+    
+    statusElement.textContent = 'Cancelled';
+    statusElement.className = 'request-status status-cancelled';
+    
+    button.textContent = 'Cancelled';
+    button.disabled = true;
+    button.style.opacity = '0.5';
+  }
+
+  trackRequest(button) {
+    // Switch to Active Expedition tab
+    const activeExpeditionTab = document.querySelector('[data-tab="active-expedition"]');
+    if (activeExpeditionTab) {
+      activeExpeditionTab.click();
+    }
   }
 }
 

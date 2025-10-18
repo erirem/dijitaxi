@@ -47,24 +47,24 @@
           <div class="pill">Create a Taxi Request</div>
 
           <div class="group">
-            <div class="label">Name Surname *</div>
-            <input type="text" class="control" placeholder="Enter your name" required>
+            <label class="label" for="name-input">Name Surname *</label>
+            <input type="text" id="name-input" class="control" placeholder="Enter your name" required aria-describedby="name-help">
           </div>
 
           <div class="group">
-            <div class="label">Phone Number *</div>
+            <label class="label" for="phone-input">Phone Number *</label>
             <div class="phone-input-container">
               <div class="country-selector">
-                <button type="button" class="country-btn" id="country-btn">
+                <button type="button" class="country-btn" id="country-btn" aria-label="Select country code" aria-expanded="false" aria-haspopup="listbox">
                   <span class="country-flag">🇦🇱</span>
                   <span class="country-code">+355</span>
                   <span class="dropdown-arrow">▼</span>
                 </button>
-                <div class="country-dropdown" id="country-dropdown">
+                <div class="country-dropdown" id="country-dropdown" role="listbox" aria-label="Country selection">
                   <!-- Countries will be loaded dynamically -->
                 </div>
               </div>
-              <input type="tel" class="phone-number-input" placeholder="Enter your phone number" required>
+              <input type="tel" id="phone-input" class="phone-number-input" placeholder="Enter your phone number" required aria-describedby="phone-help">
             </div>
           </div>
 
@@ -113,10 +113,17 @@
       <div class="tab-panel" id="my-requests">
         <section class="card">
           <div class="pill">My Requests</div>
-          <div class="empty-state">
+          
+          <!-- Empty State (when no requests) -->
+          <div class="empty-state" id="empty-requests">
             <div class="empty-icon">→</div>
             <p>To see your requests, first create a taxi request</p>
             <button class="cta-secondary">Call a Taxi</button>
+          </div>
+
+          <!-- Request List (when requests exist) -->
+          <div class="request-list" id="request-list" style="display: none;">
+            <!-- Request items will be loaded dynamically -->
           </div>
         </section>
       </div>
