@@ -1,5 +1,47 @@
 # Integration Guide
 
+## 📡 API Integration
+
+### Backend Requirements
+The component expects a REST API endpoint at `/api/taxi-request` that accepts POST requests with the following data structure:
+
+```json
+{
+  "name": "John Doe",
+  "phone": "+355123456789",
+  "countryCode": "+355",
+  "phoneNumber": "123456789",
+  "room": "101",
+  "passengers": "2",
+  "destination": "Airport",
+  "specialRequests": ["Luggage", "Wheelchair"],
+  "notes": "Additional information"
+}
+```
+
+### Expected API Response
+```json
+{
+  "success": true,
+  "requestId": "REQ-12345",
+  "message": "Taxi request submitted successfully",
+  "estimatedTime": "15 minutes"
+}
+```
+
+### Error Handling
+The component handles API errors gracefully and displays user-friendly error messages.
+
+### Custom Events
+The component dispatches a custom event `taxiRequestSubmitted` when a request is successfully submitted:
+
+```javascript
+document.addEventListener('taxiRequestSubmitted', function(event) {
+  console.log('Taxi request submitted:', event.detail);
+  // Handle the event in your main website
+});
+```
+
 ##  How to Integrate into Existing Website
 
 ### **Method 1: Iframe Integration (Easiest)**

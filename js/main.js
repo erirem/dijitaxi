@@ -150,7 +150,11 @@ class TaxiApp {
 
   getSpecialRequests() {
     const checkedBoxes = document.querySelectorAll('.check input:checked');
-    return Array.from(checkedBoxes).map(checkbox => checkbox.nextElementSibling.textContent);
+    return Array.from(checkedBoxes).map(checkbox => {
+      // Get the text content from the parent label
+      const label = checkbox.closest('label');
+      return label ? label.textContent.trim() : '';
+    }).filter(text => text !== '');
   }
 
   validateForm(data) {
@@ -180,12 +184,35 @@ class TaxiApp {
 
   submitTaxiRequest(data) {
     console.log('Submitting taxi request:', data);
-    // In real implementation, this would make an API call
-    // fetch('/api/taxi-request', { 
-    //   method: 'POST', 
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(data) 
-    // })
+    
+    // Show loading state
+    this.showLoadingState();
+    
+    // API call - ready for integration
+    fetch('/api/taxi-request', { 
+      method: 'POST', 
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify(data) 
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(result => {
+      this.hideLoadingState();
+      this.showSuccessMessage();
+      // Trigger custom event for parent website
+      this.triggerTaxiRequestEvent(result);
+    })
+    .catch(error => {
+      this.hideLoadingState();
+      this.showApiError(error);
+    });
   }
 
   showSuccessMessage() {
@@ -251,6 +278,50 @@ class TaxiApp {
     if (callTaxiButton) {
       callTaxiButton.click();
     }
+  }
+
+  showLoadingState() {
+    const ctaButton = document.querySelector('.cta');
+    if (ctaButton) {
+      ctaButton.disabled = true;
+      ctaButton.innerHTML = '⏳ Submitting...';
+      ctaButton.style.opacity = '0.7';
+    }
+  }
+
+  hideLoadingState() {
+    const ctaButton = document.querySelector('.cta');
+    if (ctaButton) {
+      ctaButton.disabled = false;
+      ctaButton.innerHTML = 'Call a Taxi Now';
+      ctaButton.style.opacity = '1';
+    }
+  }
+
+  showApiError(error) {
+    this.clearMessages();
+    const errorContainer = document.createElement('div');
+    errorContainer.className = 'error-message';
+    errorContainer.innerHTML = `
+      <div style="background: #ff4444; color: white; padding: 12px; border-radius: 8px; margin: 16px 0;">
+        <strong>❌ Request failed!</strong>
+        <p style="margin: 8px 0 0;">${error.message || 'Please try again later.'}</p>
+      </div>
+    `;
+    const form = document.querySelector('#call-taxi .card');
+    form.insertBefore(errorContainer, form.firstChild);
+  }
+
+  triggerTaxiRequestEvent(result) {
+    // Custom event for parent website integration
+    const event = new CustomEvent('taxiRequestSubmitted', {
+      detail: {
+        success: true,
+        data: result,
+        timestamp: new Date().toISOString()
+      }
+    });
+    document.dispatchEvent(event);
   }
 }
 
