@@ -1,6 +1,19 @@
 // Taxi App - Main Application Logic
 class TaxiApp {
   constructor() {
+    // Constants
+    this.SELECTORS = {
+      form: '#call-taxi .card',
+      nameInput: 'input[type="text"]',
+      phoneInput: '.phone-number-input',
+      countryCode: '.country-code',
+      roomInput: 'input[value="101"]',
+      passengersSelect: 'select',
+      destinationInput: 'input[placeholder*="Airport"]',
+      notesTextarea: 'textarea',
+      specialRequests: '.check input:checked'
+    };
+    
     this.init();
   }
 
@@ -33,7 +46,6 @@ class TaxiApp {
     const form = document.querySelector('.card');
     if (form) {
       // Add form validation logic
-      console.log('Form validation setup complete');
     }
   }
 
@@ -41,10 +53,8 @@ class TaxiApp {
     const countryBtn = document.getElementById('country-btn');
     const countryDropdown = document.getElementById('country-dropdown');
 
-    console.log('Phone input setup:', { countryBtn, countryDropdown });
-
     if (!countryBtn || !countryDropdown) {
-      console.error('Phone input elements not found');
+      this.showError('Phone input elements not found. Please refresh the page.');
       return;
     }
 
@@ -78,14 +88,10 @@ class TaxiApp {
     const countryBtn = document.getElementById('country-btn');
     const countryDropdown = document.getElementById('country-dropdown');
 
-    console.log('Binding phone events:', { countryBtn, countryDropdown });
-
     // Toggle dropdown
     countryBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      console.log('Country button clicked');
       countryDropdown.classList.toggle('show');
-      console.log('Dropdown classes after toggle:', countryDropdown.className);
     });
 
     // Close dropdown when clicking outside
@@ -102,8 +108,6 @@ class TaxiApp {
         const flag = option.dataset.flag;
         const code = option.dataset.code;
         
-        console.log('Country selected:', { flag, code });
-        
         // Update button
         countryBtn.querySelector('.country-flag').textContent = flag;
         countryBtn.querySelector('.country-code').textContent = code;
@@ -117,39 +121,49 @@ class TaxiApp {
   handleTaxiRequest(e) {
     e.preventDefault();
     
-    // Get form data
-    const formData = this.getFormData();
-    
-    // Validate form
-    if (this.validateForm(formData)) {
-      this.submitTaxiRequest(formData);
-      this.showSuccessMessage();
-    } else {
-      this.showValidationErrors();
+    try {
+      // Get form data
+      const formData = this.getFormData();
+      
+      // Validate form
+      if (this.validateForm(formData)) {
+        this.submitTaxiRequest(formData);
+      } else {
+        this.showValidationErrors();
+      }
+    } catch (error) {
+      this.showError(error.message);
     }
   }
 
   getFormData() {
     // Extract form data from actual inputs
-    const form = document.querySelector('#call-taxi .card');
-    const countryCode = document.querySelector('.country-code').textContent;
-    const phoneNumber = document.querySelector('.phone-number-input').value;
+    const form = document.querySelector(this.SELECTORS.form);
+    const countryCodeElement = document.querySelector(this.SELECTORS.countryCode);
+    const phoneInputElement = document.querySelector(this.SELECTORS.phoneInput);
+    
+    if (!form || !countryCodeElement || !phoneInputElement) {
+      throw new Error('Form elements not found. Please refresh the page.');
+    }
+    
+    const countryCode = countryCodeElement.textContent;
+    const phoneNumber = phoneInputElement.value;
     
     return {
-      name: form.querySelector('input[type="text"]')?.value || '',
+      name: form.querySelector(this.SELECTORS.nameInput)?.value || '',
       phone: `${countryCode}${phoneNumber}`,
       countryCode: countryCode,
       phoneNumber: phoneNumber,
-      room: form.querySelector('input[value="101"]')?.value || '',
-      passengers: form.querySelector('select')?.value || '',
-      destination: form.querySelector('input[placeholder*="Airport"]')?.value || '',
+      room: form.querySelector(this.SELECTORS.roomInput)?.value || '',
+      passengers: form.querySelector(this.SELECTORS.passengersSelect)?.value || '',
+      destination: form.querySelector(this.SELECTORS.destinationInput)?.value || '',
       specialRequests: this.getSpecialRequests(),
-      notes: form.querySelector('textarea')?.value || ''
+      notes: form.querySelector(this.SELECTORS.notesTextarea)?.value || ''
     };
   }
 
   getSpecialRequests() {
-    const checkedBoxes = document.querySelectorAll('.check input:checked');
+    const checkedBoxes = document.querySelectorAll(this.SELECTORS.specialRequests);
     return Array.from(checkedBoxes).map(checkbox => {
       // Get the text content from the parent label
       const label = checkbox.closest('label');
@@ -183,8 +197,6 @@ class TaxiApp {
   }
 
   submitTaxiRequest(data) {
-    console.log('Submitting taxi request:', data);
-    
     // Show loading state
     this.showLoadingState();
     
@@ -199,7 +211,13 @@ class TaxiApp {
     })
     .then(response => {
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        if (response.status === 400) {
+          throw new Error('Invalid request data. Please check your information.');
+        } else if (response.status === 500) {
+          throw new Error('Server error. Please try again later.');
+        } else {
+          throw new Error(`Request failed with status: ${response.status}`);
+        }
       }
       return response.json();
     })
@@ -211,7 +229,15 @@ class TaxiApp {
     })
     .catch(error => {
       this.hideLoadingState();
-      this.showApiError(error);
+      
+      // Handle different types of errors
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        this.showApiError(new Error('Network error. Please check your internet connection.'));
+      } else if (error.name === 'AbortError') {
+        this.showApiError(new Error('Request was cancelled. Please try again.'));
+      } else {
+        this.showApiError(error);
+      }
     });
   }
 
@@ -256,7 +282,7 @@ class TaxiApp {
   }
 
   clearForm() {
-    const form = document.querySelector('#call-taxi .card');
+    const form = document.querySelector(this.SELECTORS.form);
     const inputs = form.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
       if (input.type === 'checkbox') {
@@ -267,7 +293,7 @@ class TaxiApp {
     });
     
     // Reset room to default value
-    const roomInput = form.querySelector('input[value="101"]');
+    const roomInput = form.querySelector(this.SELECTORS.roomInput);
     if (roomInput) {
       roomInput.value = '101';
     }
@@ -308,8 +334,24 @@ class TaxiApp {
         <p style="margin: 8px 0 0;">${error.message || 'Please try again later.'}</p>
       </div>
     `;
-    const form = document.querySelector('#call-taxi .card');
+    const form = document.querySelector(this.SELECTORS.form);
     form.insertBefore(errorContainer, form.firstChild);
+  }
+
+  showError(message) {
+    this.clearMessages();
+    const errorContainer = document.createElement('div');
+    errorContainer.className = 'error-message';
+    errorContainer.innerHTML = `
+      <div style="background: #ff4444; color: white; padding: 12px; border-radius: 8px; margin: 16px 0;">
+        <strong>❌ Error!</strong>
+        <p style="margin: 8px 0 0;">${message}</p>
+      </div>
+    `;
+    const form = document.querySelector(this.SELECTORS.form);
+    if (form) {
+      form.insertBefore(errorContainer, form.firstChild);
+    }
   }
 
   triggerTaxiRequestEvent(result) {
