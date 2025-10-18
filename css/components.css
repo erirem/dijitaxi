@@ -133,12 +133,14 @@
   border: 1px solid var(--stroke);
   background: #18181B;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
 }
 
 .country-selector {
   position: relative;
   flex-shrink: 0;
+  z-index: 1001;
 }
 
 .country-btn {
@@ -176,21 +178,27 @@
 
 .country-dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4px);
   left: 0;
   right: 0;
   background: #1A1B1E;
   border: 1px solid var(--stroke);
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0,0,0,.4);
-  z-index: 1000;
+  z-index: 1002;
   max-height: 200px;
   overflow-y: auto;
   display: none;
+  min-width: 200px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
 }
 
 .country-dropdown.show {
-  display: block;
+  display: block !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 .country-option {

@@ -1,7 +1,4 @@
-/* ========================================
-   MAIN APPLICATION LOGIC
-   ======================================== */
-
+// Taxi App - Main Application Logic
 class TaxiApp {
   constructor() {
     this.init();
@@ -22,10 +19,10 @@ class TaxiApp {
       });
     }
 
-    // Secondary CTA buttons in empty states
+    // Secondary CTA buttons (for empty states)
     const secondaryButtons = document.querySelectorAll('.cta-secondary');
     secondaryButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
+      button.addEventListener('click', () => {
         this.switchToCallTaxi();
       });
     });
@@ -43,26 +40,69 @@ class TaxiApp {
   setupPhoneInput() {
     const countryBtn = document.getElementById('country-btn');
     const countryDropdown = document.getElementById('country-dropdown');
-    const countryOptions = document.querySelectorAll('.country-option');
 
-    if (!countryBtn || !countryDropdown) return;
+    console.log('Phone input setup:', { countryBtn, countryDropdown });
+
+    if (!countryBtn || !countryDropdown) {
+      console.error('Phone input elements not found');
+      return;
+    }
+
+    // Load countries dynamically
+    this.loadCountries();
+    this.bindPhoneEvents();
+  }
+
+  loadCountries() {
+    const countryDropdown = document.getElementById('country-dropdown');
+    countryDropdown.innerHTML = '';
+
+    // Use countries data from external file
+    COUNTRIES_DATA.forEach(country => {
+      const option = document.createElement('div');
+      option.className = 'country-option';
+      option.dataset.code = country.code;
+      option.dataset.flag = country.flag;
+      
+      option.innerHTML = `
+        <span class="country-flag">${country.flag}</span>
+        <span class="country-name">${country.name}</span>
+        <span class="country-code">${country.code}</span>
+      `;
+      
+      countryDropdown.appendChild(option);
+    });
+  }
+
+  bindPhoneEvents() {
+    const countryBtn = document.getElementById('country-btn');
+    const countryDropdown = document.getElementById('country-dropdown');
+
+    console.log('Binding phone events:', { countryBtn, countryDropdown });
 
     // Toggle dropdown
     countryBtn.addEventListener('click', (e) => {
       e.stopPropagation();
+      console.log('Country button clicked');
       countryDropdown.classList.toggle('show');
+      console.log('Dropdown classes after toggle:', countryDropdown.className);
     });
 
     // Close dropdown when clicking outside
-    document.addEventListener('click', () => {
-      countryDropdown.classList.remove('show');
+    document.addEventListener('click', (e) => {
+      if (!countryBtn.contains(e.target)) {
+        countryDropdown.classList.remove('show');
+      }
     });
 
-    // Handle country selection
-    countryOptions.forEach(option => {
-      option.addEventListener('click', () => {
+    // Handle country selection (event delegation)
+    countryDropdown.addEventListener('click', (e) => {
+      const option = e.target.closest('.country-option');
+      if (option) {
         const flag = option.dataset.flag;
         const code = option.dataset.code;
+        
+        console.log('Country selected:', { flag, code });
         
         // Update button
         countryBtn.querySelector('.country-flag').textContent = flag;
@@ -70,7 +110,7 @@ class TaxiApp {
         
         // Close dropdown
         countryDropdown.classList.remove('show');
-      });
+      }
     });
   }
 
@@ -83,6 +123,7 @@ class TaxiApp {
     // Validate form
     if (this.validateForm(formData)) {
       this.submitTaxiRequest(formData);
+      this.showSuccessMessage();
     } else {
       this.showValidationErrors();
     }
@@ -113,17 +154,15 @@ class TaxiApp {
   }
 
   validateForm(data) {
-    // Enhanced validation
     const errors = [];
     
-    // Required fields
     if (!data.name || data.name.trim() === '') {
       errors.push('Name is required');
     }
     
-    if (!data.phone || data.phone.trim() === '') {
+    if (!data.phoneNumber || data.phoneNumber.trim() === '') {
       errors.push('Phone number is required');
-    } else if (!/^[\+]?[0-9\s\-\(\)]{8,}$/.test(data.phone)) {
+    } else if (!/^[\+]?[0-9\s\-\(\)]{8,}$/.test(data.phoneNumber)) {
       errors.push('Please enter a valid phone number');
     }
     
@@ -135,20 +174,18 @@ class TaxiApp {
       errors.push('Number of passengers is required');
     }
     
-    // Store errors for display
     this.validationErrors = errors;
     return errors.length === 0;
   }
 
   submitTaxiRequest(data) {
-    // Simulate API call
     console.log('Submitting taxi request:', data);
-    
-    // Show success message
-    this.showSuccessMessage();
-    
     // In real implementation, this would make an API call
-    // fetch('/api/taxi-request', { method: 'POST', body: JSON.stringify(data) })
+    // fetch('/api/taxi-request', { 
+    //   method: 'POST', 
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(data) 
+    // })
   }
 
   showSuccessMessage() {
@@ -161,18 +198,16 @@ class TaxiApp {
         <p style="margin: 8px 0 0;">We'll contact you shortly to confirm your taxi.</p>
       </div>
     `;
-    
     const form = document.querySelector('#call-taxi .card');
     form.insertBefore(successContainer, form.firstChild);
     
-    // Clear form after success
+    // Clear form after 3 seconds
     setTimeout(() => {
       this.clearForm();
     }, 3000);
   }
 
   showValidationErrors() {
-    // Create error display
     this.clearMessages();
     const errorContainer = document.createElement('div');
     errorContainer.className = 'error-message';
@@ -184,19 +219,16 @@ class TaxiApp {
         </ul>
       </div>
     `;
-    
     const form = document.querySelector('#call-taxi .card');
     form.insertBefore(errorContainer, form.firstChild);
   }
 
   clearMessages() {
-    // Remove existing error/success messages
     const existingMessages = document.querySelectorAll('.error-message, .success-message');
     existingMessages.forEach(msg => msg.remove());
   }
 
   clearForm() {
-    // Clear all form inputs
     const form = document.querySelector('#call-taxi .card');
     const inputs = form.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
@@ -207,7 +239,7 @@ class TaxiApp {
       }
     });
     
-    // Reset room to default
+    // Reset room to default value
     const roomInput = form.querySelector('input[value="101"]');
     if (roomInput) {
       roomInput.value = '101';
@@ -215,7 +247,6 @@ class TaxiApp {
   }
 
   switchToCallTaxi() {
-    // Switch to Call a Taxi tab
     const callTaxiButton = document.querySelector('[data-tab="call-taxi"]');
     if (callTaxiButton) {
       callTaxiButton.click();
@@ -223,7 +254,7 @@ class TaxiApp {
   }
 }
 
-// Initialize application
+// Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   new TaxiApp();
 });
