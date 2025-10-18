@@ -48,28 +48,34 @@
 
           <div class="group">
             <div class="label">Name Surname *</div>
-            <div class="control">Enter your name</div>
+            <input type="text" class="control" placeholder="Enter your name" required>
           </div>
 
           <div class="group">
             <div class="label">Phone Number *</div>
-            <div class="control">🇦🇱 +355 ••• ••• •••</div>
+            <input type="tel" class="control" placeholder="🇦🇱 +355 ••• ••• •••" required>
           </div>
 
           <div class="group-row">
             <div class="group">
               <div class="label">Room</div>
-              <div class="control">🔔 101</div>
+              <input type="text" class="control" placeholder="🔔 101" value="101">
             </div>
             <div class="group">
               <div class="label">Passengers *</div>
-              <div class="control">1 Person</div>
+              <select class="control" required>
+                <option value="1">1 Person</option>
+                <option value="2">2 People</option>
+                <option value="3">3 People</option>
+                <option value="4">4 People</option>
+                <option value="5+">5+ People</option>
+              </select>
             </div>
           </div>
 
           <div class="group">
             <div class="label">Destination *</div>
-            <div class="control">Airport / City</div>
+            <input type="text" class="control" placeholder="Airport / City" required>
           </div>
 
           <div class="group">
@@ -84,7 +90,7 @@
 
           <div class="group">
             <div class="label">Additional Notes</div>
-            <div class="textarea">Any additional info…</div>
+            <textarea class="textarea" placeholder="Any additional info…"></textarea>
           </div>
         </section>
       </div>

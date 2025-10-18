@@ -113,6 +113,18 @@
   align-items: center;
   height: 48px;
   font-size: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.control:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(166, 149, 105, 0.2);
+}
+
+.control::placeholder, .textarea::placeholder {
+  color: #8B8B8B;
 }
 
 .textarea {

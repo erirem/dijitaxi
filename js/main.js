@@ -54,15 +54,16 @@ class TaxiApp {
   }
 
   getFormData() {
-    // Extract form data
+    // Extract form data from actual inputs
+    const form = document.querySelector('#call-taxi .card');
     return {
-      name: document.querySelector('input[placeholder*="name"]')?.value || '',
-      phone: document.querySelector('input[placeholder*="phone"]')?.value || '',
-      room: document.querySelector('.control:has(.bell)')?.textContent || '',
-      passengers: document.querySelector('.control:has(.person)')?.textContent || '',
-      destination: document.querySelector('input[placeholder*="destination"]')?.value || '',
+      name: form.querySelector('input[type="text"]')?.value || '',
+      phone: form.querySelector('input[type="tel"]')?.value || '',
+      room: form.querySelector('input[value="101"]')?.value || '',
+      passengers: form.querySelector('select')?.value || '',
+      destination: form.querySelector('input[placeholder*="Airport"]')?.value || '',
       specialRequests: this.getSpecialRequests(),
-      notes: document.querySelector('.textarea')?.value || ''
+      notes: form.querySelector('textarea')?.value || ''
     };
   }
 
@@ -72,9 +73,31 @@ class TaxiApp {
   }
 
   validateForm(data) {
-    // Basic validation
-    const required = ['name', 'phone', 'destination'];
-    return required.every(field => data[field] && data[field].trim() !== '');
+    // Enhanced validation
+    const errors = [];
+    
+    // Required fields
+    if (!data.name || data.name.trim() === '') {
+      errors.push('Name is required');
+    }
+    
+    if (!data.phone || data.phone.trim() === '') {
+      errors.push('Phone number is required');
+    } else if (!/^[\+]?[0-9\s\-\(\)]{8,}$/.test(data.phone)) {
+      errors.push('Please enter a valid phone number');
+    }
+    
+    if (!data.destination || data.destination.trim() === '') {
+      errors.push('Destination is required');
+    }
+    
+    if (!data.passengers || data.passengers === '') {
+      errors.push('Number of passengers is required');
+    }
+    
+    // Store errors for display
+    this.validationErrors = errors;
+    return errors.length === 0;
   }
 
   submitTaxiRequest(data) {
@@ -89,11 +112,66 @@ class TaxiApp {
   }
 
   showSuccessMessage() {
-    alert('Taxi request submitted successfully!');
+    this.clearMessages();
+    const successContainer = document.createElement('div');
+    successContainer.className = 'success-message';
+    successContainer.innerHTML = `
+      <div style="background: #44ff44; color: #141414; padding: 12px; border-radius: 8px; margin: 16px 0;">
+        <strong>✅ Taxi request submitted successfully!</strong>
+        <p style="margin: 8px 0 0;">We'll contact you shortly to confirm your taxi.</p>
+      </div>
+    `;
+    
+    const form = document.querySelector('#call-taxi .card');
+    form.insertBefore(successContainer, form.firstChild);
+    
+    // Clear form after success
+    setTimeout(() => {
+      this.clearForm();
+    }, 3000);
   }
 
   showValidationErrors() {
-    alert('Please fill in all required fields.');
+    // Create error display
+    this.clearMessages();
+    const errorContainer = document.createElement('div');
+    errorContainer.className = 'error-message';
+    errorContainer.innerHTML = `
+      <div style="background: #ff4444; color: white; padding: 12px; border-radius: 8px; margin: 16px 0;">
+        <strong>Please fix the following errors:</strong>
+        <ul style="margin: 8px 0 0 20px;">
+          ${this.validationErrors.map(error => `<li>${error}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+    
+    const form = document.querySelector('#call-taxi .card');
+    form.insertBefore(errorContainer, form.firstChild);
+  }
+
+  clearMessages() {
+    // Remove existing error/success messages
+    const existingMessages = document.querySelectorAll('.error-message, .success-message');
+    existingMessages.forEach(msg => msg.remove());
+  }
+
+  clearForm() {
+    // Clear all form inputs
+    const form = document.querySelector('#call-taxi .card');
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+      if (input.type === 'checkbox') {
+        input.checked = false;
+      } else {
+        input.value = '';
+      }
+    });
+    
+    // Reset room to default
+    const roomInput = form.querySelector('input[value="101"]');
+    if (roomInput) {
+      roomInput.value = '101';
+    }
   }
 
   switchToCallTaxi() {
